@@ -1,15 +1,21 @@
 #!/bin/bash
+
+# Forcing on
 if [ "${1}" = "--on" ]; then
     sudo ufw reset
     sudo ufw default deny incoming
     sudo ufw default deny outgoing
     sudo ufw allow out on tun0 from any to any
     sudo ufw enable
+
+# Forcing off
 elif [ "${1}" = "--off" ]; then
     sudo ufw reset
     sudo ufw default deny incoming
     sudo ufw default allow outgoing
     sudo ufw enable
+
+# Display status
 elif [ "${1}" = "--status" ]; then
 	status=$(sudo ufw status | grep -c "tun0")
 	if [ ${status} -ge 1 ]; then
@@ -17,6 +23,13 @@ elif [ "${1}" = "--status" ]; then
 	else
 		echo "VPN forcing disabled"
 	fi
+# Bad args
+else
+   echo "Invalid agument"
+    exit 1
 fi
+
+# Graceful exit
+exit 0
     
 
